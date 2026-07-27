@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task/core/constants/home_strings.dart';
-import 'package:task/core/resources/app_colors.dart';
 import 'package:task/core/resources/app_text_styles.dart';
+import 'package:task/feature/home/presentation/view_model/character_view_model.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});
@@ -11,24 +12,14 @@ class HomeHeader extends StatelessWidget {
     return Row(
       children: [
         const Expanded(
-          child: Row(
-            children: [
-              Icon(
-                Icons.description_outlined,
-                color: AppColors.primary,
-                size: 28,
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: Text(HomeStrings.appTitle, style: AppTextStyles.title),
-              ),
-            ],
-          ),
+          child: Text(HomeStrings.appTitle, style: AppTextStyles.title),
         ),
         OutlinedButton.icon(
-          onPressed: () {},
+          onPressed: () {
+            context.read<CharacterViewModel>().exportCharacters();
+          },
           icon: const Icon(Icons.file_download_outlined),
-          label: const Text(HomeStrings.export, style: AppTextStyles.button),
+          label: const Text(HomeStrings.export),
         ),
       ],
     );

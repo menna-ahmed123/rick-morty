@@ -13,6 +13,7 @@ import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:task/config/dio/dio_module.dart' as _i46;
+import 'package:task/core/services/excel_service.dart' as _i577;
 import 'package:task/feature/home/api/client/character_api_client.dart'
     as _i367;
 import 'package:task/feature/home/api/data_sources/remote_data_source_impl.dart'
@@ -21,6 +22,8 @@ import 'package:task/feature/home/data/data_sources/character_remote_data_source
     as _i314;
 import 'package:task/feature/home/data/repos/character_repo_impl.dart' as _i663;
 import 'package:task/feature/home/domain/repos/character_repo.dart' as _i1054;
+import 'package:task/feature/home/domain/use_cases/export_characters_use_case.dart'
+    as _i115;
 import 'package:task/feature/home/domain/use_cases/get_character_use_cases.dart'
     as _i992;
 import 'package:task/feature/home/presentation/view_model/character_view_model.dart'
@@ -35,8 +38,13 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final dioModule = _$DioModule();
     gh.singleton<_i361.Dio>(() => dioModule.dio);
+    gh.lazySingleton<_i577.ExcelService>(() => _i577.ExcelService());
     gh.singleton<_i367.CharacterApiClient>(
       () => _i367.CharacterApiClient(gh<_i361.Dio>()),
+    );
+    gh.lazySingleton<_i115.ExportCharactersUseCase>(
+      () =>
+          _i115.ExportCharactersUseCase(excelService: gh<_i577.ExcelService>()),
     );
     gh.lazySingleton<_i314.CharacterRemoteDataSource>(
       () => _i267.CharacterRemoteDataSourceImpl(gh<_i367.CharacterApiClient>()),
@@ -51,7 +59,10 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.factory<_i421.CharacterViewModel>(
-      () => _i421.CharacterViewModel(gh<_i992.GetCharactersUseCase>()),
+      () => _i421.CharacterViewModel(
+        gh<_i992.GetCharactersUseCase>(),
+        gh<_i115.ExportCharactersUseCase>(),
+      ),
     );
     return this;
   }
