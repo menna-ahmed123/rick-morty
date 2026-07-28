@@ -38,7 +38,7 @@ The app allows users to browse characters, search for specific characters, and v
 
 ### Export Excel
 
-![Export Excel](screenshots/excel_export.jpeg)
+![Export Excel](screenshots/excel.jpeg)
 
 ## 🎥 Demo Video
 
